@@ -1,67 +1,42 @@
 #!/usr/bin/python3
-"""
-    A module to defin isWinner function.
-"""
+"""Prime Game - Maria and Ben are playing a game"""
 
 
 def isWinner(x, nums):
+    """The x - rounds
+   The nums - numbers list
     """
-    The function to get who won in prime game.
-    """
-    mariaWinsCount = 0
-    benWinsCount = 0
+    if x <= 0 or nums is None:
+        return None
+    if x != len(nums):
+        return None
 
-    for num in nums:
-        roundsSet = list(range(1, num + 1))
-        primesSet = primes_in_range(1, num)
+    ben = 0
+    maria = 0
 
-        if not primesSet:
-            benWinsCount += 1
-            continue
+    a = [1 for x in range(sorted(nums)[-1] + 1)]
+    a[0], a[1] = 0, 0
+    for i in range(2, len(a)):
+        rm_multiples(a, i)
 
-        isMariaTurns = True
-
-        while(True):
-            if not primesSet:
-                if isMariaTurns:
-                    benWinsCount += 1
-                else:
-                    mariaWinsCount += 1
-                break
-
-            smallestPrime = primesSet.pop(0)
-            roundsSet.remove(smallestPrime)
-
-            roundsSet = [x for x in roundsSet if x % smallestPrime != 0]
-
-            isMariaTurns = not isMariaTurns
-
-    if mariaWinsCount > benWinsCount:
-        return " Maria"
-
-    if mariaWinsCount < benWinsCount:
-        return " Ben"
-
+    for i in nums:
+        if sum(a[0:i + 1]) % 2 == 0:
+            ben += 1
+        else:
+            maria += 1
+    if ben > maria:
+        return "Ben"
+    if maria > ben:
+        return "Maria"
     return None
 
 
-def is_prime(n):
+def rm_multiples(ls, x):
+    """it removes multiple
+    of primes
     """
-    It returns True if n is prime, else False.
-    """
-    if n < 2:
-        return False
-    for i in range(2, int(n ** 0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
-
-
-def primes_in_range(start, end):
-    """
-    It returns a list of prime numbers between start and end (inclusive).
-    """
-    primes = [n for n in range(start, end+1) if is_prime(n)]
-    return primes
-
-
+    for i in range(2, len(ls)):
+        try:
+            ls[i * x] = 0
+        except (ValueError, IndexError):
+            break
